@@ -50,66 +50,351 @@ THRESHOLD_RECOMMENDATION_PATH = ROOT / "outputs" / "reports" / "threshold_recomm
 EDA_SUMMARY_PATH = ROOT / "outputs" / "reports" / "eda_summary.txt"
 
 # Dark ink / blue / teal styling. Uses Streamlit's native layout and Plotly charts.
+
 st.markdown(
     """
     <style>
-    :root { --fs-ink:#0B1628; --fs-blue:#1677C8; --fs-teal:#22D3EE; }
-    .stApp { background: #F5F8FC; }
-    [data-testid="stHeader"] { background: transparent !important; }
-    [data-testid="stToolbar"] { background: transparent !important; }
-    /* Keep page content clear of Streamlit's sticky top toolbar. */
+    :root {
+        --fs-ink: #0B1628;
+        --fs-blue: #1677C8;
+        --fs-teal: #22D3EE;
+        --fs-text: #24344D;
+        --fs-muted: #52647D;
+    }
+
+    /* Main page */
+    .stApp {
+        background: #F5F8FC;
+        color: var(--fs-text);
+    }
+
+    [data-testid="stAppViewContainer"] {
+        color: var(--fs-text);
+    }
+
+    [data-testid="stHeader"],
+    [data-testid="stToolbar"] {
+        background: transparent !important;
+    }
+
     [data-testid="stAppViewContainer"] .main .block-container {
         padding-top: 2rem !important;
+        padding-bottom: 2rem;
+        max-width: 1600px;
     }
-    [data-testid="stSidebar"] { background: #0B1628; }
-    [data-testid="stSidebar"] * { color: #F5F8FC !important; }
-    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color:#aebbd0 !important; }
-    [data-testid="stSidebar"] .fs-nav-heading { color:#91a4bf; font-size:.70rem; font-weight:800; letter-spacing:.12em; margin:0 0 .55rem .15rem; }
-    [data-testid="stSidebar"] [data-testid="stButton"] { margin:.13rem 0; }
+
+    /* Main content typography */
+    [data-testid="stMain"] p,
+    [data-testid="stMain"] li,
+    [data-testid="stMain"] label,
+    [data-testid="stMain"] .stMarkdown,
+    [data-testid="stMain"] [data-testid="stCaptionContainer"] {
+        color: var(--fs-text);
+    }
+
+    [data-testid="stMain"] h1,
+    [data-testid="stMain"] h2,
+    [data-testid="stMain"] h3,
+    [data-testid="stMain"] h4 {
+        color: #142742;
+    }
+
+    [data-testid="stMain"] [data-testid="stWidgetLabel"],
+    [data-testid="stMain"] [data-testid="stMetricLabel"] {
+        color: var(--fs-muted) !important;
+    }
+
+    /* Sidebar — retain dark navy branding */
+    [data-testid="stSidebar"] {
+        background: #0B1628;
+    }
+
+    [data-testid="stSidebar"] * {
+        color: #F5F8FC;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+        color: #D5DFEF !important;
+    }
+
+    [data-testid="stSidebar"] .fs-nav-heading {
+        color: #B5C7DF;
+        font-size: .70rem;
+        font-weight: 800;
+        letter-spacing: .12em;
+        margin: 0 0 .55rem .15rem;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stButton"] {
+        margin: .13rem 0;
+    }
+
     [data-testid="stSidebar"] [data-testid="stButton"] button {
-        min-height:2.55rem; border-radius:10px; border:1px solid transparent;
-        text-align:left; justify-content:flex-start; padding:.48rem .72rem;
-        font-size:.84rem; font-weight:600; transition:background .18s ease, border-color .18s ease, transform .18s ease;
-        box-shadow:none;
+        min-height: 2.55rem;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        text-align: left;
+        justify-content: flex-start;
+        padding: .48rem .72rem;
+        font-size: .84rem;
+        font-weight: 600;
+        transition: background .18s ease, border-color .18s ease,
+                    transform .18s ease;
+        box-shadow: none;
     }
+
     [data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"] {
-        background:transparent !important; color:#d5dfef !important;
+        background: transparent !important;
+        color: #E2EAF5 !important;
     }
+
     [data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"]:hover {
-        background:#1b2c48 !important; border-color:#314766 !important; color:#ffffff !important;
-        transform:translateX(2px);
+        background: #1B2C48 !important;
+        border-color: #496487 !important;
+        color: #FFFFFF !important;
+        transform: translateX(2px);
     }
+
     [data-testid="stSidebar"] [data-testid="stButton"] button[kind="primary"] {
-        background:#263d62 !important; color:#ffffff !important; border-color:#3d5a83 !important;
-        box-shadow:inset 3px 0 0 #4aa8ff;
+        background: #263D62 !important;
+        color: #FFFFFF !important;
+        border-color: #4A6C99 !important;
+        box-shadow: inset 3px 0 0 #4AA8FF;
     }
+
     [data-testid="stSidebar"] [data-testid="stButton"] button[kind="primary"]:hover {
-        background:#304d78 !important; border-color:#4a6c99 !important;
+        background: #304D78 !important;
+        border-color: #6D91BD !important;
     }
-    .fs-brand {font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:#fff;margin-bottom:0;}
-    .fs-subbrand {font-size:.78rem;color:#aebbd0;margin-top:0;}
-    .fs-eyebrow {text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;font-weight:800;color:#64748b;}
-    .fs-hero {background:linear-gradient(115deg,#0B1628 0%,#1677C8 72%,#22D3EE 130%);padding:1.45rem 1.6rem;border-radius:18px;color:white;margin:0 0 1rem 0;border-top:0;position:relative;overflow:hidden;min-height:145px;display:flex;align-items:center;justify-content:space-between;gap:1rem;box-shadow:0 8px 24px rgba(11,37,68,.12);}
-    .fs-hero-copy {position:relative;z-index:2;max-width:78%;}
-    .fs-hero-logo {width:150px;height:130px;object-fit:contain;opacity:.98;mix-blend-mode:screen;background:transparent;border-radius:12px;filter:drop-shadow(0 0 12px rgba(34,211,238,.24));position:relative;z-index:1;}
-    .fs-brand-logo {display:block;width:132px;height:112px;object-fit:contain;margin:0 auto .25rem auto;border-radius:14px;}
-    .fs-brand-wrap {text-align:center;padding:.2rem .1rem .65rem .1rem;}
-    .fs-brand-name {font-size:1.3rem;font-weight:800;letter-spacing:-.03em;color:#fff;margin:0;}
-    .fs-brand-name span {color:#22D3EE;}
-    .fs-brand-tag {font-size:.76rem;color:#c6d9ef;line-height:1.45;margin:.3rem 0 0 0;}
-    .fs-hero h1 {color:white;margin:0;font-size:2rem;letter-spacing:-.04em;}
-    .fs-hero p {color:#F5F8FC;margin:.4rem 0 0 0;}
-    .fs-card {background:white;border:1px solid #e5eaf2;border-radius:15px;padding:1rem 1.05rem;box-shadow:0 4px 14px rgba(22,34,51,.035);min-height:112px;}
-    .fs-card-label {font-size:.78rem;color:#64748b;font-weight:650;margin-bottom:.45rem;}
-    .fs-card-value {font-size:1.75rem;font-weight:800;color:#0B1628;line-height:1.1;}
-    .fs-card-note {font-size:.76rem;color:#64748b;margin-top:.45rem;}
-    .fs-section {font-size:1.08rem;font-weight:800;color:#172b4d;margin:.4rem 0 .15rem 0;}
-    .fs-muted {color:#64748b;font-size:.86rem;}
-    .fs-pill {display:inline-block;padding:.24rem .6rem;border-radius:999px;background:#e8f3ff;color:#15558a;font-weight:700;font-size:.75rem;}
-    div[data-testid="stMetric"] {background:white;border:1px solid #e5eaf2;padding:14px 16px;border-radius:14px;box-shadow:0 4px 14px rgba(22,34,51,.035);}
-    div[data-testid="stMetricLabel"] {color:#64748b;}
-    div[data-testid="stPlotlyChart"] {background:white;border:1px solid #e5eaf2;border-radius:14px;padding:8px;}
-    .block-container {padding-top:2rem;padding-bottom:2rem;max-width:1600px;}
+
+    /* Brand and hero */
+    .fs-brand {
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -.03em;
+        color: #FFFFFF;
+        margin-bottom: 0;
+    }
+
+    .fs-subbrand {
+        font-size: .78rem;
+        color: #D5DFEF;
+        margin-top: 0;
+    }
+
+    .fs-eyebrow {
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-size: .72rem;
+        font-weight: 800;
+        color: #52647D;
+    }
+
+    .fs-hero {
+        background: linear-gradient(
+            115deg, #0B1628 0%, #1677C8 72%, #22D3EE 130%
+        );
+        padding: 1.45rem 1.6rem;
+        border-radius: 18px;
+        color: #FFFFFF;
+        margin: 0 0 1rem 0;
+        position: relative;
+        overflow: hidden;
+        min-height: 145px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        box-shadow: 0 8px 24px rgba(11, 37, 68, .12);
+    }
+
+    .fs-hero-copy {
+        position: relative;
+        z-index: 2;
+        max-width: 78%;
+    }
+
+    .fs-hero h1,
+    .fs-hero p {
+        color: #FFFFFF !important;
+    }
+
+    .fs-hero h1 {
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: -.04em;
+    }
+
+    .fs-hero p {
+        margin: .4rem 0 0 0;
+    }
+
+    .fs-hero-logo {
+        width: 150px;
+        height: 130px;
+        object-fit: contain;
+        opacity: .98;
+        mix-blend-mode: screen;
+        background: transparent;
+        border-radius: 12px;
+        filter: drop-shadow(0 0 12px rgba(34, 211, 238, .24));
+        position: relative;
+        z-index: 1;
+    }
+
+    .fs-brand-logo {
+        display: block;
+        width: 132px;
+        height: 112px;
+        object-fit: contain;
+        margin: 0 auto .25rem auto;
+        border-radius: 14px;
+    }
+
+    .fs-brand-wrap {
+        text-align: center;
+        padding: .2rem .1rem .65rem .1rem;
+    }
+
+    .fs-brand-name {
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -.03em;
+        color: #FFFFFF;
+        margin: 0;
+    }
+
+    .fs-brand-name span {
+        color: #22D3EE;
+    }
+
+    .fs-brand-tag {
+        font-size: .76rem;
+        color: #D5E7F8;
+        line-height: 1.45;
+        margin: .3rem 0 0 0;
+    }
+
+    /* KPI cards */
+    .fs-card {
+        background: #FFFFFF;
+        border: 1px solid #DCE5F0;
+        border-radius: 15px;
+        padding: 1rem 1.05rem;
+        box-shadow: 0 4px 14px rgba(22, 34, 51, .035);
+        min-height: 112px;
+    }
+
+    .fs-card-label {
+        font-size: .78rem;
+        color: #52647D;
+        font-weight: 650;
+        margin-bottom: .45rem;
+    }
+
+    .fs-card-value {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #0B1628;
+        line-height: 1.1;
+    }
+
+    .fs-card-note {
+        font-size: .76rem;
+        color: #52647D;
+        margin-top: .45rem;
+    }
+
+    .fs-section {
+        font-size: 1.08rem;
+        font-weight: 800;
+        color: #172B4D;
+        margin: .4rem 0 .15rem 0;
+    }
+
+    .fs-muted {
+        color: #52647D;
+        font-size: .86rem;
+    }
+
+    .fs-pill {
+        display: inline-block;
+        padding: .24rem .6rem;
+        border-radius: 999px;
+        background: #E8F3FF;
+        color: #124B7A;
+        font-weight: 700;
+        font-size: .75rem;
+    }
+
+    /* Metrics */
+    div[data-testid="stMetric"] {
+        background: #FFFFFF;
+        border: 1px solid #DCE5F0;
+        padding: 14px 16px;
+        border-radius: 14px;
+        box-shadow: 0 4px 14px rgba(22, 34, 51, .035);
+    }
+
+    div[data-testid="stMetricLabel"],
+    div[data-testid="stMetricLabel"] * {
+        color: #52647D !important;
+    }
+
+    div[data-testid="stMetricValue"],
+    div[data-testid="stMetricValue"] * {
+        color: #0B1628 !important;
+    }
+
+    /* Inputs */
+    [data-testid="stMain"] input,
+    [data-testid="stMain"] textarea,
+    [data-testid="stMain"] [data-baseweb="select"] > div {
+        color: #172B4D !important;
+        background-color: #FFFFFF !important;
+        border-color: #B8C7D9 !important;
+    }
+
+    [data-testid="stMain"] input::placeholder,
+    [data-testid="stMain"] textarea::placeholder {
+        color: #66758A !important;
+        opacity: 1;
+    }
+
+    /* Tables */
+    [data-testid="stMain"] [data-testid="stTable"] {
+        color: #172B4D !important;
+    }
+
+    [data-testid="stMain"] [data-testid="stDataFrame"] {
+        color: #172B4D !important;
+    }
+
+    /* Plotly charts: chart canvas and labels */
+    div[data-testid="stPlotlyChart"] {
+        background: #FFFFFF;
+        border: 1px solid #DCE5F0;
+        border-radius: 14px;
+        padding: 8px;
+    }
+
+    .js-plotly-plot .plotly .xtick text,
+    .js-plotly-plot .plotly .ytick text,
+    .js-plotly-plot .plotly .g-xtitle text,
+    .js-plotly-plot .plotly .g-ytitle text,
+    .js-plotly-plot .plotly .legend text {
+        fill: #334155 !important;
+    }
+
+    /* Alerts */
+    [data-testid="stAlert"] {
+        color: #172B4D !important;
+    }
+
+    [data-testid="stAlert"] p,
+    [data-testid="stAlert"] div {
+        color: #172B4D !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
