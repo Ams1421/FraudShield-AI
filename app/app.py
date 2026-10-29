@@ -33,6 +33,7 @@ st.set_page_config(
 APP_DIR = Path(__file__).resolve().parent
 ROOT = APP_DIR.parent
 DATA_PATHS = [
+    ROOT / "data" / "processed" / "creditcard_cleaned.csv.gz",
     ROOT / "data" / "processed" / "creditcard_cleaned.csv",
     ROOT / "data" / "raw" / "creditcard.csv",
 ]
@@ -189,8 +190,10 @@ def model_scores(model, data):
 data_path = first_existing(DATA_PATHS)
 model_path = first_existing(MODEL_PATHS)
 if data_path is None:
-    st.error("Dataset not found. Expected data/processed/creditcard_cleaned.csv or data/raw/creditcard.csv.")
-    st.code("C:\\Projects\\FraudShield-AI\\data\\processed\\creditcard_cleaned.csv")
+    st.error(
+        "Dataset not found. Expected the compressed dataset at "
+        "data/processed/creditcard_cleaned.csv.gz."
+    )
     st.stop()
 
 try:

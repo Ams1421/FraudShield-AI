@@ -1,0 +1,20 @@
+FRAUDSHIELD AI - EDA REPORT
+=============================================
+Total transactions: 284,807
+Genuine transactions: 284,315
+Fraudulent transactions: 492
+Fraud percentage: 0.1727%
+Missing values: 0
+Exact duplicate rows after first occurrence: 1,081
+Class counts among all rows belonging to duplicate groups: {0: 1822, 1: 32}
+
+Total amount in fraud-labelled rows: 60,127.97
+Total amount in genuine-labelled rows: 25,102,462.04
+Mean transaction amount: 88.35
+Median transaction amount: 22.00
+Mean fraud-labelled transaction amount: 122.21
+Mean genuine transaction amount: 88.29
+
+Note: Fraud-labelled amounts are not necessarily confirmed
+financial losses or recovered amounts.
+Currency and original customer/merchant details are not supplied.

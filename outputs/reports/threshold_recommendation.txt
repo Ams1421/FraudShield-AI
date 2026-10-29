@@ -1,0 +1,16 @@
+FRAUDSHIELD AI - THRESHOLD ANALYSIS
+==========================================
+Validation rows: 56,745
+Validation fraud cases: 94
+Target recall: 90%
+Candidate threshold: 0.01
+Validation precision: 0.1332
+Validation recall: 0.9043
+Validation F1-score: 0.2322
+Validation alerts: 638
+Validation false positives: 553
+Validation missed fraud: 9
+
+Selected the highest-precision tested threshold meeting the validation recall target.
+This is a candidate threshold, not a final production setting.
+The test set was not used to choose this threshold.
