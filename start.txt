@@ -1,0 +1,6 @@
+activate: .\.venv\Scripts\Activate.ps1
+Deactivate: deactivate
+Check Python version: python --version
+Check active Python path: python -c "import sys; print(sys.executable)"
+Install a package: python -m pip install package_name
+app start:  python -m streamlit run app/app.py
